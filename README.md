@@ -1,4 +1,4 @@
-## 🎮 Elevate Your Gameplay in Escape From Tarkov with Inferno Cheat Hack 🎮
+## 🎮 Escape From Tarkov with Inferno Cheat Hack 🎮
 
 ---
 <p align="center">

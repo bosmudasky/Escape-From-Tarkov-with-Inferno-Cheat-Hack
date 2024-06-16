@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="id">
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <title>Menguji identitas objek jQuery</title>
+</head>
+<body>
+<h1>Menguji identitas objek jQuery</h1>
+<p>Halaman ini berisi kode javascript untuk mengetahui dalam kasus mana jQuery mengembalikan referensi ke objek yang ada
+dan kapan membuat salinan.</p>
+<p>paragraf tes 2<span>555</span></p>
+<p>paragraf tes 3</p>
+
+<script>
+    (function() {
+        if ( typeof Object.prototype.uniqueId == "undefined" ) {
+            var id = 0;
+            Object.prototype.uniqueId = function() {
+                if ( typeof this.__uniqueid == "undefined" ) {
+                    this.__uniqueid = ++id;
+                }
+                return this.__uniqueid;
+            };
+        }
+    })();
+    $(document).ready(function(){
+        var $a = $('<span style="font-weight: bold;"> asdf</span>');
+        var $b = $('p');
+        var $h = $('h1');
+        var $ba, $ha;
+
+        $ba = $a.appendTo($b);
+        $ha = $a.appendTo($h);
+
+        console.log('$a: ' + $a.uniqueId());
+        console.log('span: ' + $a[0].uniqueId());
+
+        console.log('$b: ' + $b.uniqueId());
+        console.log($ba);
+        console.log('$ba: ' + $ba.uniqueId());
+        console.log('$ba span 0: ' + $ba[0].uniqueId());
+        console.log('$ba span 1: ' + $ba[1].uniqueId());
+        console.log('$ba span 2: ' + $ba[2].uniqueId());
+
+        console.log('$ha: ' + $ha.uniqueId());
+        console.log('$ha span 0: ' + $ha[0].uniqueId());
+
+        console.log($b.text());
+
+        $b.text('<span>444</span>');
+
+        console.log($b.text());
+
+
+        // Uji untuk issue #33 https://github.com/wasinger/htmlpagedom/issues/33
+        // Bekerja seperti yang diharapkan reporter di jquery tapi tidak di HtmlPageDom
+
+        var $rootNode = $('<div />').appendTo($('body'));
+        var $p = $('<p />');
+        var $testNode = $('<span />');
+        $testNode.text('teks tidak benar');
+        $p.append($testNode);
+        $rootNode.append($p);
+
+        // Ubah teks node tes setelah node ditambahkan
+        $testNode.text('teks benar');
+
+        // Output root atau parent node html. Tidak benar di HtmlPageDom, Benar di jquery
+        console.log($rootNode.html());
+        console.log($p.html());
+
+        // Output node html. Benar
+        console.log($testNode.html());
+
+        // Uji kedua: menambahkan node ke beberapa elemen.
+        // Jika $testNode ditambahkan ke beberapa elemen, tidak bekerja di jquery, juga:
+        $rootNode = $('<div />').appendTo($('body'));
+        $p = $('<p /><p />');
+        $testNode = $('<span />');
+        $testNode.text('teks tidak benar');
+        $p.append($testNode);
+        $rootNode.append($p);
+
+        // Ubah teks node tes setelah node ditambahkan
+        $testNode.text('teks benar');
+
+        // Output root atau parent node html. Tidak benar di jquery dan HtmlPageDom
+        console.log($rootNode.html());
+        console.log($p.html());
+
+        // Output node html. Benar
+        console.log($testNode.html());
+
+        // Tambahan text
+        console.log("bosmudasky.com");
+        console.log("Elevate Your Gameplay in Escape From Tarkov with Inferno Cheat Hack");
+
+    });
+</script>
+</body>
+</html>
